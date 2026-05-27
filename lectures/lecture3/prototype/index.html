@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KadaiFlow - 動くプロトタイプ v1</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(-45deg, #090d16, #120e2e, #1a0b2e, #050811);
+            --phone-bg: #0b0f19;
+            --accent-primary: #8b5cf6; /* パープル */
+            --accent-secondary: #06b6d4; /* シアン */
+            --accent-success: #10b981; /* エメラルド */
+            --accent-warning: #f59e0b; /* アンバー */
+            --accent-danger: #ef4444; /* ローズ */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(22, 28, 45, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(15, 23, 42, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* PCでのレイアウト調整（説明用の枠とスマホモック） */
+        .wrapper {
+            display: flex;
+            gap: 40px;
+            max-width: 1000px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .info-panel {
+            flex: 1;
+            min-width: 320px;
+            max-width: 450px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .info-panel h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-panel p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .feature-list {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature-icon {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #22d3ee;
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-desc h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* 📱 スマホモックアップ */
+        .phone-mockup {
+            width: 380px;
+            height: 780px;
+            background: var(--phone-bg);
+            border: 10px solid #1e293b;
+            border-radius: 44px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* スマホ上部のノッチ */
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #1e293b;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .notch-camera {
+            width: 10px;
+            height: 10px;
+            background: #0f172a;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .notch-speaker {
+            width: 40px;
+            height: 4px;
+            background: #334155;
+            border-radius: 2px;
+        }
+
+        /* ステータスバー */
+        .status-bar {
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 999;
+            color: var(--text-main);
+        }
+
+        .status-bar .right-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* iOS風プッシュ通知バナー */
+        .push-notification {
+            position: absolute;
+            top: -100px;
+            left: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 14px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            gap: 12px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+        }
+
+        .push-notification.show {
+            top: 48px;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .push-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .push-content {
+            flex: 1;
+        }
+
+        .push-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .push-app-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #a78bfa;
+            letter-spacing: 0.5px;
+        }
+
+        .push-time {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .push-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .push-desc {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            line-height: 1.3;
+        }
+
+        /* アプリ画面コンテンツ */
+        .app-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 12px 20px 24px;
+        }
+
+        /* アプリヘッダー */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            margin-top: 4px;
+        }
+
+        .app-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #c084fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-action {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* 達成率プログレスバー */
+        .progress-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .progress-text {
+            color: #d8b4fe;
+        }
+
+        .progress-percent {
+            color: #22d3ee;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        /* タスクリスト（スクロール） */
+        .task-list-container {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding-right: 4px;
+        }
+
+        /* カスタムスクロールバー */
+        .task-list-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .task-list-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .task-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-card.completed {
+            opacity: 0.55;
+            transform: scale(0.97);
+            border-color: rgba(255, 255, 255, 0.02);
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-primary);
+        }
+
+        .task-card.emergency-high::before {
+            background: var(--accent-danger);
+        }
+
+        .task-card.emergency-medium::before {
+            background: var(--accent-warning);
+        }
+
+        .task-card.completed::before {
+            background: var(--text-muted);
+        }
+
+        .checkbox-container {
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: transparent;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .task-card.completed .custom-checkbox {
+            background: var(--accent-success);
+            border-color: var(--accent-success);
+            color: white;
+        }
+
+        .task-card:not(.completed):hover .custom-checkbox {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+        }
+
+        .task-body {
+            flex: 1;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .task-category {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        .task-card.completed .task-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .task-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+
+        .badge-info {
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #22d3ee;
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            align-self: flex-start;
+        }
+
+        .btn-delete:hover {
+            color: var(--accent-danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* 🧙 マジック・インポートセクション */
+        .import-panel {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+        }
+
+        .import-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #c084fc;
+            margin-bottom: 10px;
+        }
+
+        .import-input-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .import-textarea {
+            width: 100%;
+            height: 72px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.75rem;
+            color: var(--text-main);
+            resize: none;
+            outline: none;
+            transition: all 0.2s;
+            line-height: 1.4;
+        }
+
+        .import-textarea:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        }
+
+        .import-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .import-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .preset-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-preset {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-preset:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+        }
+
+        /* 📭 空白表示 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-state p {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        /* 音声や効果音用のシミュレート */
+        .audio-wave {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            height: 10px;
+        }
+        .audio-wave span {
+            width: 2px;
+            height: 100%;
+            background: currentColor;
+            border-radius: 1px;
+            animation: soundWave 0.8s ease-in-out infinite alternate;
+        }
+        .audio-wave span:nth-child(2) { animation-delay: 0.2s; }
+        .audio-wave span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes soundWave {
+            0% { height: 2px; }
+            100% { height: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <!-- 📄 説明パネル -->
+    <div class="info-panel">
+        <h1><i data-lucide="sparkles"></i> KadaiFlow v1</h1>
+        <p>
+            「課題期限忘れ」「複数ツールの散らばり」「続かない」を極上デザインで解決する、大学生のための課題・予定管理アプリの動くプロトタイプです。
+        </p>
+        
+        <div>
+            <span class="feature-tag">VPC Fitモデル</span>
+            <span class="feature-tag">モバイルファースト</span>
+            <span class="feature-tag">ゲーミフィケーション</span>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon"><i data-lucide="bell-ring" style="width:16px; height:16px;"></i></div>
+                <div class="feature-desc">
+                    <h3>期限忘れを防ぐプッシュ通知</h3>
+                    <p>スマホ内の「🔔 通知テスト」ボタンから、期限3時間前のリッチなiOS風バナー通知をいつでも再現・確認できます。</p>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i data-lucide="wand-2" style="width:16px; height:16px;"></i></div>
+                <div class="feature-desc">
+                    <h3>マジック・インポート</h3>
+                    <p>LINEやTeamsなどの連絡コピペから、期限や課題名をAI風に自動抽出し、ダッシュボードへ一発でタスク登録します。</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon"><i data-lucide="award" style="width:16px; height:16px;"></i></div>
+                <div class="feature-desc">
+                    <h3>爽快な完了体験</h3>
+                    <p>タスクの完了チェックを入れると、色鮮やかな紙吹雪(Confetti)が舞い散り、毎日のタスク管理が楽しく継続します。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 スマホモックアップ -->
+    <div class="phone-mockup">
+        <!-- 上部ノッチ -->
+        <div class="phone-notch">
+            <div class="notch-camera"></div>
+            <div class="notch-speaker"></div>
+        </div>
+
+        <!-- プッシュ通知バナー -->
+        <div id="pushNotification" class="push-notification">
+            <div class="push-icon">
+                <i data-lucide="bell" style="width:18px; height:18px;"></i>
+            </div>
+            <div class="push-content">
+                <div class="push-header">
+                    <span class="push-app-name">🔔 KADAIFLOW</span>
+                    <span class="push-time">現在</span>
+                </div>
+                <div class="push-title">【提出間近！】web3・AI概論</div>
+                <div class="push-desc">第3回宿題レポートの期限まであと3時間です！忘れずにポータルから提出しましょう。</div>
+            </div>
+        </div>
+
+        <!-- ステータスバー -->
+        <div class="status-bar">
+            <span>09:41</span>
+            <div class="right-icons">
+                <i data-lucide="signal" style="width:12px; height:12px;"></i>
+                <i data-lucide="wifi" style="width:12px; height:12px;"></i>
+                <i data-lucide="battery" style="width:14px; height:14px;"></i>
+            </div>
+        </div>
+
+        <!-- アプリ内コンテンツ -->
+        <div class="app-content">
+            <!-- アプリヘッダー -->
+            <div class="app-header">
+                <div class="app-title">KadaiFlow</div>
+                <button class="btn-action" onclick="triggerNotification()">
+                    <i data-lucide="bell-ring" style="width:12px; height:12px;"></i>
+                    通知テスト
+                </button>
+            </div>
+
+            <!-- プログレスカード -->
+            <div class="progress-card">
+                <div class="progress-info">
+                    <span class="progress-text">今週の課題達成率</span>
+                    <span id="progressPercent" class="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progressBarFill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="section-title">今日の課題・予定</div>
+
+            <!-- スクロール可能なタスクリスト -->
+            <div id="taskListContainer" class="task-list-container">
+                <!-- 動的に生成されます -->
+            </div>
+
+            <!-- マジックインポートパネル -->
+            <div class="import-panel">
+                <div class="import-panel-header">
+                    <i data-lucide="wand-2" style="width:14px; height:14px;"></i>
+                    <span>マジック・インポート (LINE/LINE等から)</span>
+                </div>
+                <div class="import-input-container">
+                    <textarea id="importInput" class="import-textarea" placeholder="LINEの連絡などをコピペしてね...&#10;例: 来週の英語のレポート明日までだって！"></textarea>
+                </div>
+                <div class="import-actions">
+                    <div class="preset-tags">
+                        <button class="btn-preset" onclick="applyPreset(1)">LINEの噂話</button>
+                        <button class="btn-preset" onclick="applyPreset(2)">Teamsの公式</button>
+                    </div>
+                    <button class="btn-primary" onclick="magicImport()">
+                        <i data-lucide="sparkles" style="width:12px; height:12px;"></i>
+                        AI自動抽出
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // アイコンの初期化
+    lucide.createIcons();
+
+    // モックデータ初期値
+    let tasks = [
+        {
+            id: 1,
+            category: "web3・AI概論",
+            title: "第3回宿題提出 (リポジトリ push)",
+            dueDate: "本日 23:59 まで",
+            badge: "🔥 残り3時間",
+            badgeType: "danger",
+            completed: false
+        },
+        {
+            id: 2,
+            category: "英語コミュニケーション",
+            title: "Unit 4 テキスト問題回答 & オンライン提出",
+            dueDate: "明日 12:00 まで",
+            badge: "⏳ 残り1日",
+            badgeType: "warning",
+            completed: false
+        },
+        {
+            id: 3,
+            category: "データ構造とアルゴリズム",
+            title: "第2回プログラミング演習レポート",
+            dueDate: "5月31日(日) まで",
+            badge: "📅 今週中",
+            badgeType: "info",
+            completed: true
+        }
+    ];
+
+    // タスクリストのレンダリング
+    function renderTasks() {
+        const container = document.getElementById("taskListContainer");
+        container.innerHTML = "";
+
+        if (tasks.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i data-lucide="smile" style="width: 32px; height: 32px; color: var(--text-muted);"></i>
+                    <p>今日の予定・課題はありません！<br>素晴らしい計画性ですね！</p>
+                </div>
+            `;
+            lucide.createIcons();
+            updateProgress();
+            return;
+        }
+
+        // 締め切り順/未完了順にソートして並べる
+        const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+
+        sortedTasks.forEach(task => {
+            const card = document.createElement("div");
+            card.className = `task-card ${task.completed ? 'completed' : ''} ${task.badgeType === 'danger' ? 'emergency-high' : task.badgeType === 'warning' ? 'emergency-medium' : ''}`;
+            
+            card.innerHTML = `
+                <div class="checkbox-container" onclick="toggleTask(${task.id})">
+                    <div class="custom-checkbox">
+                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                    </div>
+                </div>
+                <div class="task-body">
+                    <div class="task-header">
+                        <span class="task-category">${task.category}</span>
+                        <button class="btn-delete" onclick="deleteTask(event, ${task.id})">
+                            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                        </button>
+                    </div>
+                    <div class="task-title">${task.title}</div>
+                    <div class="task-meta">
+                        <div class="meta-item">
+                            <i data-lucide="clock" style="width: 11px; height: 11px;"></i>
+                            <span>${task.dueDate}</span>
+                        </div>
+                        ${!task.completed ? `<span class="badge badge-${task.badgeType}">${task.badge}</span>` : ''}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        lucide.createIcons();
+        updateProgress();
+    }
+
+    // 達成プログレスバーの更新
+    function updateProgress() {
+        const total = tasks.length;
+        const completed = tasks.filter(t => t.completed).length;
+        const percent = total > 0 ? Math.round((completed / total) * 100) : 100;
+
+        const fill = document.getElementById("progressBarFill");
+        const text = document.getElementById("progressPercent");
+
+        fill.style.width = `${percent}%`;
+        text.innerText = `${percent}%`;
+    }
+
+    // タスク完了切り替え & Confetti
+    function toggleTask(id) {
+        const index = tasks.findIndex(t => t.id === id);
+        if (index !== -1) {
+            tasks[index].completed = !tasks[index].completed;
+            
+            // 完了にした瞬間のみ Confetti を飛ばす
+            if (tasks[index].completed) {
+                triggerConfetti();
+            }
+            
+            renderTasks();
+        }
+    }
+
+    // タスク削除
+    function deleteTask(event, id) {
+        event.stopPropagation(); // チェックボックスクリックイベントの伝播を防止
+        tasks = tasks.filter(t => t.id !== id);
+        renderTasks();
+    }
+
+    // 豪華なConfetti（紙吹雪）演出
+    function triggerConfetti() {
+        const duration = 0.5 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 25, spread: 360, ticks: 50, zIndex: 3000 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function() {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 30 * (timeLeft / duration);
+            // スマホモックアップ付近から発生するように調整
+            confetti(Object.assign({}, defaults, { 
+                particleCount, 
+                origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.4, 0.6) } 
+            }));
+        }, 150);
+    }
+
+    // プッシュ通知シミュレーターの起動
+    function triggerNotification() {
+        const notification = document.getElementById("pushNotification");
+        notification.classList.add("show");
+        
+        // 5秒後に非表示にする
+        setTimeout(() => {
+            notification.classList.remove("show");
+        }, 5000);
+    }
+
+    // マジックインポートプリセット
+    const presets = {
+        1: "LINE: 「やばい！明日の昼12時までに、英語コミュニケーションのUnit 4テキスト問題回答やってオンラインで出さなきゃいけないの完全に忘れてた！」",
+        2: "Teams: 「【重要】データ構造とアルゴリズムの受講生へ。第2回プログラミング演習レポートを、5月31日(日)の23:59までにポータルにPDF形式で提出してください。」"
+    };
+
+    function applyPreset(id) {
+        document.getElementById("importInput").value = presets[id];
+    }
+
+    // マジックインポートの抽出解析（モックロジック）
+    function magicImport() {
+        const text = document.getElementById("importInput").value.trim();
+        if (!text) {
+            alert("LINEやTeamsの連絡メッセージを入力してください！");
+            return;
+        }
+
+        // 解析中アニメーション（簡易）
+        const importBtn = document.querySelector(".btn-primary");
+        const originalContent = importBtn.innerHTML;
+        importBtn.innerHTML = `
+            <div class="audio-wave"><span></span><span></span><span></span></div>
+            解析中...
+        `;
+        importBtn.disabled = true;
+
+        setTimeout(() => {
+            let category = "一般タスク";
+            let title = "抽出された課題";
+            let dueDate = "明日まで";
+            let badge = "⌛ 残り1日";
+            let badgeType = "warning";
+
+            // 科目名判定
+            if (text.includes("英語") || text.includes("English")) {
+                category = "英語コミュニケーション";
+                title = "Unit 4 テキスト回答・提出";
+            } else if (text.includes("アルゴリズム") || text.includes("データ構造")) {
+                category = "データ構造とアルゴリズム";
+                title = "第2回演習プログラミングレポート";
+            } else if (text.includes("概論") || text.includes("web3")) {
+                category = "web3・AI概論";
+                title = "第3回宿題提出 (リポジトリ push)";
+            }
+
+            // タイトル判定
+            if (text.includes("レポート") || text.includes("提出")) {
+                if (category === "一般タスク") title = "レポート課題の提出";
+            }
+
+            // 期限判定
+            if (text.includes("明日")) {
+                dueDate = "明日まで";
+                badge = "⌛ 残り1日";
+                badgeType = "warning";
+            } else if (text.includes("31日") || text.includes("日")) {
+                dueDate = "5月31日(日) 23:59 まで";
+                badge = "📅 今週中";
+                badgeType = "info";
+            } else if (text.includes("今すぐ") || text.includes("忘れてた")) {
+                dueDate = "本日中";
+                badge = "🔥 残り時間わずか";
+                badgeType = "danger";
+            }
+
+            // 重複チェック（簡易）
+            const exists = tasks.some(t => t.category === category && t.title === title);
+            
+            if (exists) {
+                alert("この課題は既にダッシュボードに登録されています！");
+            } else {
+                // 新しいタスクを追加
+                const newId = Date.now();
+                tasks.push({
+                    id: newId,
+                    category,
+                    title,
+                    dueDate,
+                    badge,
+                    badgeType,
+                    completed: false
+                });
+
+                renderTasks();
+                
+                // インプットをクリア
+                document.getElementById("importInput").value = "";
+                
+                // 成功Confetti
+                triggerConfetti();
+            }
+
+            // ボタン復元
+            importBtn.innerHTML = originalContent;
+            importBtn.disabled = false;
+
+        }, 1200);
+    }
+
+    // 初回レンダリング
+    renderTasks();
+</script>
+
+</body>
+</html>
