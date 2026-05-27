@@ -139,7 +139,7 @@ VPC に沿った初期プロトタイプ(任意):
 
 | 項目 | 回答 |
 |---|---|
-| デプロイURL(Vercel等) | [KadaiFlow プロトタイプ (ローカル起動)](./prototype/index.html) |
+| デプロイURL(Vercel等) | [KadaiFlow 公開プロトタイプ](https://iinoibuki.github.io/fanyeyichui-web3ai-2026/) |
 | 一言紹介 | LINE/Teamsの連絡コピペからAI風に課題を自動抽出＆通知で期限忘れを防ぐ極上スマホモックアプリ |
 
 > 必須ではありません。\
