@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KadaiFlow - 動くプロトタイプ v1</title>
+    <title>KadaiFlow v2 - 動くプロトタイプ</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,8 +15,8 @@
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(-45deg, #090d16, #120e2e, #1a0b2e, #050811);
-            --phone-bg: #0b0f19;
+            --bg-gradient: linear-gradient(-45deg, #060913, #0f0b25, #160829, #03050c);
+            --phone-bg: #090c15;
             --accent-primary: #8b5cf6; /* パープル */
             --accent-secondary: #06b6d4; /* シアン */
             --accent-success: #10b981; /* エメラルド */
@@ -26,8 +26,9 @@
             --text-muted: #94a3b8;
             --card-bg: rgba(22, 28, 45, 0.6);
             --card-border: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(15, 23, 42, 0.3);
+            --glass-bg: rgba(15, 23, 42, 0.45);
             --glass-border: rgba(255, 255, 255, 0.05);
+            --neon-glow: 0 0 10px rgba(139, 92, 246, 0.3);
         }
 
         * {
@@ -57,36 +58,36 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* PCでのレイアウト調整（説明用の枠とスマホモック） */
         .wrapper {
             display: flex;
             gap: 40px;
-            max-width: 1000px;
+            max-width: 1050px;
             width: 100%;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
         }
 
+        /* 📄 説明パネル */
         .info-panel {
             flex: 1;
             min-width: 320px;
-            max-width: 450px;
-            background: rgba(15, 23, 42, 0.6);
+            max-width: 480px;
+            background: rgba(15, 23, 42, 0.65);
             border: 1px solid var(--card-border);
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 32px;
             backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
         }
 
         .info-panel h1 {
-            font-size: 2rem;
+            font-size: 2.1rem;
             font-weight: 800;
             background: linear-gradient(135deg, #a78bfa, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -99,67 +100,90 @@
             font-size: 0.95rem;
         }
 
+        .tag-container {
+            margin-bottom: 24px;
+        }
+
         .feature-tag {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.25);
             color: #c084fc;
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 9999px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
             margin-right: 8px;
             margin-bottom: 8px;
         }
 
+        .v2-badge {
+            background: rgba(6, 182, 212, 0.15) !important;
+            border: 1px solid rgba(6, 182, 212, 0.4) !important;
+            color: #22d3ee !important;
+        }
+
         .feature-list {
-            margin-top: 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 18px;
         }
 
         .feature-item {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            gap: 14px;
         }
 
         .feature-icon {
-            background: rgba(6, 182, 212, 0.15);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            color: #22d3ee;
-            padding: 6px;
-            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #a78bfa;
+            padding: 7px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .feature-desc h3 {
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             font-weight: 700;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .new-label {
+            background: #06b6d4;
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
 
         .feature-desc p {
             font-size: 0.85rem;
             color: var(--text-muted);
             margin-bottom: 0;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         /* 📱 スマホモックアップ */
         .phone-mockup {
-            width: 380px;
-            height: 780px;
+            width: 385px;
+            height: 795px;
             background: var(--phone-bg);
-            border: 10px solid #1e293b;
+            border: 11px solid #1e293b;
             border-radius: 44px;
             position: relative;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 65px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -171,7 +195,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
+            width: 155px;
             height: 25px;
             background: #1e293b;
             border-bottom-left-radius: 18px;
@@ -199,11 +223,11 @@
 
         /* ステータスバー */
         .status-bar {
-            height: 40px;
+            height: 42px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 28px 0;
+            padding: 14px 28px 0;
             font-size: 0.75rem;
             font-weight: 600;
             z-index: 999;
@@ -219,15 +243,15 @@
         /* iOS風プッシュ通知バナー */
         .push-notification {
             position: absolute;
-            top: -100px;
+            top: -110px;
             left: 12px;
             right: 12px;
             background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
             padding: 14px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
             z-index: 2000;
             display: flex;
             gap: 12px;
@@ -243,10 +267,10 @@
         }
 
         .push-icon {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 8px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -266,27 +290,27 @@
 
         .push-app-name {
             font-size: 0.75rem;
-            font-weight: 700;
-            color: #a78bfa;
+            font-weight: 800;
+            color: #c084fc;
             letter-spacing: 0.5px;
         }
 
         .push-time {
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
         }
 
         .push-title {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: white;
             margin-bottom: 2px;
         }
 
         .push-desc {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: #cbd5e1;
-            line-height: 1.3;
+            line-height: 1.35;
         }
 
         /* アプリ画面コンテンツ */
@@ -295,7 +319,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 12px 20px 24px;
+            padding: 12px 20px 20px;
         }
 
         /* アプリヘッダー */
@@ -303,30 +327,37 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             margin-top: 4px;
         }
 
         .app-title {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 800;
             background: linear-gradient(135deg, #c084fc, #6366f1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
         }
 
         .btn-action {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            padding: 8px 14px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
             transition: all 0.2s;
             backdrop-filter: blur(10px);
         }
@@ -339,11 +370,11 @@
 
         /* 達成率プログレスバー */
         .progress-card {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(6, 182, 212, 0.05) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(6, 182, 212, 0.06) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 18px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
         }
 
         .progress-info {
@@ -377,12 +408,67 @@
             transition: width 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
 
+        /* 🎛️ フィルター＆追加バー */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-tab {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tab.active {
+            background: var(--glass-bg);
+            color: var(--text-main);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-plus {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn-plus:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--neon-glow);
+        }
+
         /* タスクリスト（スクロール） */
         .task-list-container {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 16px;
-            padding-right: 4px;
+            margin-bottom: 12px;
+            padding-right: 2px;
         }
 
         /* カスタムスクロールバー */
@@ -394,21 +480,12 @@
             border-radius: 2px;
         }
 
-        .section-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
         .task-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
+            padding: 13px 14px;
+            margin-bottom: 10px;
             display: flex;
             gap: 12px;
             align-items: flex-start;
@@ -424,10 +501,10 @@
         }
 
         .task-card.completed {
-            opacity: 0.55;
+            opacity: 0.5;
             transform: scale(0.97);
             border-color: rgba(255, 255, 255, 0.02);
-            background: rgba(15, 23, 42, 0.3);
+            background: rgba(15, 23, 42, 0.25);
         }
 
         .task-card::before {
@@ -489,11 +566,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .task-category {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
             letter-spacing: 0.3px;
@@ -505,11 +582,11 @@
         }
 
         .task-title {
-            font-size: 0.85rem;
+            font-size: 0.83rem;
             font-weight: 700;
             line-height: 1.4;
             color: var(--text-main);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .task-meta {
@@ -523,7 +600,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
         }
 
@@ -560,7 +637,7 @@
             border: none;
             color: rgba(255, 255, 255, 0.2);
             cursor: pointer;
-            padding: 4px;
+            padding: 3px;
             border-radius: 6px;
             transition: all 0.2s;
             align-self: flex-start;
@@ -576,7 +653,7 @@
             background: rgba(15, 23, 42, 0.85);
             border: 1px solid var(--card-border);
             border-radius: 20px;
-            padding: 16px;
+            padding: 14px;
             backdrop-filter: blur(20px);
         }
 
@@ -584,25 +661,25 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: #c084fc;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .import-input-container {
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .import-textarea {
             width: 100%;
-            height: 72px;
+            height: 60px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 0.75rem;
+            padding: 8px 12px;
+            font-size: 0.72rem;
             color: var(--text-main);
             resize: none;
             outline: none;
@@ -616,7 +693,7 @@
         }
 
         .import-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.15);
         }
 
         .import-actions {
@@ -629,20 +706,20 @@
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border: none;
             color: white;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 7px 14px;
+            border-radius: 9px;
+            font-size: 0.72rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             transition: all 0.2s;
         }
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+            box-shadow: var(--neon-glow);
         }
 
         .preset-tags {
@@ -654,8 +731,8 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text-muted);
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 3px 6px;
+            border-radius: 5px;
             font-size: 0.65rem;
             font-weight: 600;
             cursor: pointer;
@@ -664,6 +741,196 @@
 
         .btn-preset:hover {
             background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+        }
+
+        /* 🪟 モーダル / ポップアップ (タスク追加・AI確認用) */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1500;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            width: 100%;
+            background: #0f1322;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 24px 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.8, 0.2, 1);
+            max-height: 85%;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #c084fc;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* タイマー選択ラジオ */
+        .timer-options {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .timer-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .timer-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .timer-label {
+            display: block;
+            text-align: center;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            padding: 8px 4px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+        }
+
+        .timer-option input:checked + .timer-label {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: var(--accent-primary);
+            color: #d8b4fe;
+            box-shadow: var(--neon-glow);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            box-shadow: var(--neon-glow);
+        }
+
+        /* 🤖 AI抽出結果プレビュー確認画面用 */
+        .ai-preview-box {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .ai-preview-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .ai-preview-item:last-child {
+            border-bottom: none;
+        }
+
+        .ai-preview-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .ai-preview-val {
+            font-weight: 700;
             color: var(--text-main);
         }
 
@@ -685,7 +952,6 @@
             line-height: 1.4;
         }
 
-        /* 音声や効果音用のシミュレート */
         .audio-wave {
             display: inline-flex;
             align-items: center;
@@ -713,39 +979,48 @@
 <div class="wrapper">
     <!-- 📄 説明パネル -->
     <div class="info-panel">
-        <h1><i data-lucide="sparkles"></i> KadaiFlow v1</h1>
+        <h1><i data-lucide="sparkles"></i> KadaiFlow v2</h1>
         <p>
             「課題期限忘れ」「複数ツールの散らばり」「続かない」を極上デザインで解決する、大学生のための課題・予定管理アプリの動くプロトタイプです。
         </p>
         
-        <div>
+        <div class="tag-container">
             <span class="feature-tag">VPC Fitモデル</span>
-            <span class="feature-tag">モバイルファースト</span>
-            <span class="feature-tag">ゲーミフィケーション</span>
+            <span class="feature-tag v2-badge">v2: 永続化(保存)対応</span>
+            <span class="feature-tag v2-badge">v2: 自動タイマー通知</span>
+            <span class="feature-tag v2-badge">v2: 音声＆振動効果</span>
         </div>
 
         <div class="feature-list">
             <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="bell-ring" style="width:16px; height:16px;"></i></div>
+                <div class="feature-icon"><i data-lucide="save" style="width:16px; height:16px;"></i></div>
                 <div class="feature-desc">
-                    <h3>期限忘れを防ぐプッシュ通知</h3>
-                    <p>スマホ内の「🔔 通知テスト」ボタンから、期限3時間前のリッチなiOS風バナー通知をいつでも再現・確認できます。</p>
-                </div>
-            </div>
-            
-            <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="wand-2" style="width:16px; height:16px;"></i></div>
-                <div class="feature-desc">
-                    <h3>マジック・インポート</h3>
-                    <p>LINEやTeamsなどの連絡コピペから、期限や課題名をAI風に自動抽出し、ダッシュボードへ一発でタスク登録します。</p>
+                    <h3><span class="new-label">NEW</span> データの永続保存 (localStorage)</h3>
+                    <p>タスクの登録、完了、削除データがブラウザに永続保存されます。ページをリロードしてもあなたのタスクリストは消えません。</p>
                 </div>
             </div>
 
             <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="award" style="width:16px; height:16px;"></i></div>
+                <div class="feature-icon"><i data-lucide="clock-3" style="width:16px; height:16px;"></i></div>
                 <div class="feature-desc">
-                    <h3>爽快な完了体験</h3>
-                    <p>タスクの完了チェックを入れると、色鮮やかな紙吹雪(Confetti)が舞い散り、毎日のタスク管理が楽しく継続します。</p>
+                    <h3><span class="new-label">NEW</span> リアルタイム時間経過通知</h3>
+                    <p>タスク新規追加時に「10秒後」などのデモ用タイマーを設定可能。時間が来るとバックグラウンド処理により自動で通知されます。</p>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i data-lucide="volume-2" style="width:16px; height:16px;"></i></div>
+                <div class="feature-desc">
+                    <h3><span class="new-label">NEW</span> 五感に訴える通知 (音＆振動)</h3>
+                    <p>通知バナー出現時に、Web Audio APIで生成した電子音を鳴らし、さらにスマホ実機では「ヴヴッ」とバイブが連動します。</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon"><i data-lucide="search-code" style="width:16px; height:16px;"></i></div>
+                <div class="feature-desc">
+                    <h3><span class="new-label">NEW</span> AI抽出プレビュー & 確認</h3>
+                    <p>LINE等のコピペ抽出結果をそのまま登録せず、一旦確認・修正して登録できるステップを追加し、誤動作を防ぎます。</p>
                 </div>
             </div>
         </div>
@@ -760,7 +1035,7 @@
         </div>
 
         <!-- プッシュ通知バナー -->
-        <div id="pushNotification" class="push-notification">
+        <div id="pushNotification" class="push-notification" onclick="dismissNotification()">
             <div class="push-icon">
                 <i data-lucide="bell" style="width:18px; height:18px;"></i>
             </div>
@@ -769,14 +1044,14 @@
                     <span class="push-app-name">🔔 KADAIFLOW</span>
                     <span class="push-time">現在</span>
                 </div>
-                <div class="push-title">【提出間近！】web3・AI概論</div>
-                <div class="push-desc">第3回宿題レポートの期限まであと3時間です！忘れずにポータルから提出しましょう。</div>
+                <div id="pushTitle" class="push-title">【提出間近！】web3・AI概論</div>
+                <div id="pushDesc" class="push-desc">第3回宿題レポートの期限まであと3時間です！忘れずにポータルから提出しましょう。</div>
             </div>
         </div>
 
         <!-- ステータスバー -->
         <div class="status-bar">
-            <span>09:41</span>
+            <span id="statusBarTime">09:41</span>
             <div class="right-icons">
                 <i data-lucide="signal" style="width:12px; height:12px;"></i>
                 <i data-lucide="wifi" style="width:12px; height:12px;"></i>
@@ -788,11 +1063,18 @@
         <div class="app-content">
             <!-- アプリヘッダー -->
             <div class="app-header">
-                <div class="app-title">KadaiFlow</div>
-                <button class="btn-action" onclick="triggerNotification()">
-                    <i data-lucide="bell-ring" style="width:12px; height:12px;"></i>
-                    通知テスト
-                </button>
+                <div class="app-title">
+                    <i data-lucide="sparkles" style="width:18px; height:18px; color: #a78bfa;"></i>
+                    KadaiFlow
+                </div>
+                <div class="header-actions">
+                    <button class="btn-action" onclick="triggerManualDemoNotification()" title="通知テスト">
+                        <i data-lucide="bell-ring" style="width:14px; height:14px;"></i>
+                    </button>
+                    <button class="btn-action" onclick="clearAllData()" title="データをリセット">
+                        <i data-lucide="rotate-ccw" style="width:14px; height:14px;"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- プログレスカード -->
@@ -806,7 +1088,18 @@
                 </div>
             </div>
 
-            <div class="section-title">今日の課題・予定</div>
+            <!-- フィルター ＆ 追加ボタン -->
+            <div class="filter-bar">
+                <div class="filter-tabs">
+                    <button id="filter-all" class="filter-tab active" onclick="setFilter('all')">すべて</button>
+                    <button id="filter-active" class="filter-tab" onclick="setFilter('active')">未完了</button>
+                    <button id="filter-completed" class="filter-tab" onclick="setFilter('completed')">完了</button>
+                </div>
+                <button class="btn-plus" onclick="openAddModal()">
+                    <i data-lucide="plus" style="width:12px; height:12px;"></i>
+                    課題追加
+                </button>
+            </div>
 
             <!-- スクロール可能なタスクリスト -->
             <div id="taskListContainer" class="task-list-container">
@@ -834,6 +1127,108 @@
                 </div>
             </div>
         </div>
+
+        <!-- 🪟 新規タスク追加モーダル -->
+        <div id="addModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i data-lucide="plus-circle" style="width:18px; height:18px;"></i>
+                        <span>手動で課題を追加</span>
+                    </div>
+                    <button class="btn-close" onclick="closeAddModal()">
+                        <i data-lucide="x" style="width:18px; height:18px;"></i>
+                    </button>
+                </div>
+                
+                <form id="addForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label">科目名</label>
+                        <input type="text" id="formCategory" class="form-input" placeholder="例: web3・AI概論" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">課題タイトル</label>
+                        <input type="text" id="formTitle" class="form-input" placeholder="例: 第6回宿題提出" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">表示する期限</label>
+                            <input type="text" id="formDueDate" class="form-input" placeholder="例: 明日 12:00まで" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🔔 デモ用自動通知タイマー</label>
+                        <div class="timer-options">
+                            <div class="timer-option">
+                                <input type="radio" name="timerVal" id="timer-none" value="0" checked>
+                                <label for="timer-none" class="timer-label">なし</label>
+                            </div>
+                            <div class="timer-option">
+                                <input type="radio" name="timerVal" id="timer-10s" value="10">
+                                <label for="timer-10s" class="timer-label">10秒後</label>
+                            </div>
+                            <div class="timer-option">
+                                <input type="radio" name="timerVal" id="timer-30s" value="30">
+                                <label for="timer-30s" class="timer-label">30秒後</label>
+                            </div>
+                            <div class="timer-option">
+                                <input type="radio" name="timerVal" id="timer-60s" value="60">
+                                <label for="timer-60s" class="timer-label">1分後</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">ダッシュボードに追加</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 🪟 AI抽出プレビュー確認モーダル -->
+        <div id="previewModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i data-lucide="sparkles" style="width:18px; height:18px; color:#22d3ee;"></i>
+                        <span>AI抽出プレビュー確認</span>
+                    </div>
+                    <button class="btn-close" onclick="closePreviewModal()">
+                        <i data-lucide="x" style="width:18px; height:18px;"></i>
+                    </button>
+                </div>
+                
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px; line-height:1.4;">
+                    テキストから自動抽出された結果です。必要に応じて修正し、登録ボタンを押してください。
+                </p>
+
+                <div class="ai-preview-box">
+                    <div class="ai-preview-item">
+                        <span class="ai-preview-label">科目名:</span>
+                        <input type="text" id="previewCategory" class="form-input" style="padding:6px; font-size:0.75rem; width:70%;">
+                    </div>
+                    <div class="ai-preview-item">
+                        <span class="ai-preview-label">課題タイトル:</span>
+                        <input type="text" id="previewTitle" class="form-input" style="padding:6px; font-size:0.75rem; width:70%;">
+                    </div>
+                    <div class="ai-preview-item">
+                        <span class="ai-preview-label">表示する期限:</span>
+                        <input type="text" id="previewDueDate" class="form-input" style="padding:6px; font-size:0.75rem; width:70%;">
+                    </div>
+                    <div class="ai-preview-item">
+                        <span class="ai-preview-label">🔔 デモタイマー:</span>
+                        <select id="previewTimer" class="form-input" style="padding:6px; font-size:0.75rem; width:70%; background:#1e293b;">
+                            <option value="0">なし</option>
+                            <option value="10" selected>10秒後（テスト用）</option>
+                            <option value="30">30秒後</option>
+                            <option value="60">1分後</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn-submit" onclick="confirmAIImport()">この内容でダッシュボードに登録</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -841,21 +1236,31 @@
     // アイコンの初期化
     lucide.createIcons();
 
-    // モックデータ初期値
-    let tasks = [
+    // ステータスバーの時間をリアルタイム更新
+    function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById("statusBarTime").innerText = `${hrs}:${mins}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 初期デフォルトタスク
+    const defaultTasks = [
         {
             id: 1,
             category: "web3・AI概論",
-            title: "第3回宿題提出 (リポジトリ push)",
+            title: "第6回宿題提出 (プロトタイプ v2 投稿)",
             dueDate: "本日 23:59 まで",
-            badge: "🔥 残り3時間",
+            badge: "🔥 残り時間わずか",
             badgeType: "danger",
             completed: false
         },
         {
             id: 2,
             category: "英語コミュニケーション",
-            title: "Unit 4 テキスト問題回答 & オンライン提出",
+            title: "Unit 6 テキスト問題回答 & 提出",
             dueDate: "明日 12:00 まで",
             badge: "⏳ 残り1日",
             badgeType: "warning",
@@ -864,24 +1269,75 @@
         {
             id: 3,
             category: "データ構造とアルゴリズム",
-            title: "第2回プログラミング演習レポート",
-            dueDate: "5月31日(日) まで",
+            title: "第4回プログラミング演習レポート",
+            dueDate: "6月7日(日) まで",
             badge: "📅 今週中",
             badgeType: "info",
             completed: true
         }
     ];
 
+    // 状態管理
+    let tasks = [];
+    let currentFilter = 'all';
+
+    // localStorageから読み込み
+    function loadTasks() {
+        const saved = localStorage.getItem('kadaiflow_tasks_v2');
+        if (saved) {
+            try {
+                tasks = JSON.parse(saved);
+            } catch (e) {
+                console.error("Failed to parse stored tasks, loading default", e);
+                tasks = [...defaultTasks];
+            }
+        } else {
+            tasks = [...defaultTasks];
+            saveTasks();
+        }
+    }
+
+    // localStorageへ保存
+    function saveTasks() {
+        localStorage.setItem('kadaiflow_tasks_v2', JSON.stringify(tasks));
+    }
+
+    // データ全リセット
+    function clearAllData() {
+        if (confirm("すべてのデータをリセットし、初期データに戻しますか？")) {
+            localStorage.removeItem('kadaiflow_tasks_v2');
+            loadTasks();
+            renderTasks();
+            triggerConfetti();
+        }
+    }
+
+    // フィルターの変更
+    function setFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(`filter-${filter}`).classList.add('active');
+        renderTasks();
+    }
+
     // タスクリストのレンダリング
     function renderTasks() {
         const container = document.getElementById("taskListContainer");
         container.innerHTML = "";
 
-        if (tasks.length === 0) {
+        // フィルター適用
+        let filteredTasks = tasks;
+        if (currentFilter === 'active') {
+            filteredTasks = tasks.filter(t => !t.completed);
+        } else if (currentFilter === 'completed') {
+            filteredTasks = tasks.filter(t => t.completed);
+        }
+
+        if (filteredTasks.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <i data-lucide="smile" style="width: 32px; height: 32px; color: var(--text-muted);"></i>
-                    <p>今日の予定・課題はありません！<br>素晴らしい計画性ですね！</p>
+                    <i data-lucide="inbox" style="width: 32px; height: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
+                    <p>表示する課題はありません！<br>${currentFilter === 'active' ? 'すべての課題が完了しています！' : '課題を追加してみましょう！'}</p>
                 </div>
             `;
             lucide.createIcons();
@@ -890,7 +1346,7 @@
         }
 
         // 締め切り順/未完了順にソートして並べる
-        const sortedTasks = [...tasks].sort((a, b) => a.completed - b.completed);
+        const sortedTasks = [...filteredTasks].sort((a, b) => a.completed - b.completed);
 
         sortedTasks.forEach(task => {
             const card = document.createElement("div");
@@ -939,14 +1395,15 @@
         text.innerText = `${percent}%`;
     }
 
-    // タスク完了切り替え & Confetti
+    // タスク完了切り替え
     function toggleTask(id) {
         const index = tasks.findIndex(t => t.id === id);
         if (index !== -1) {
             tasks[index].completed = !tasks[index].completed;
+            saveTasks();
             
-            // 完了にした瞬間のみ Confetti を飛ばす
             if (tasks[index].completed) {
+                playCompletionSound();
                 triggerConfetti();
             }
             
@@ -956,16 +1413,97 @@
 
     // タスク削除
     function deleteTask(event, id) {
-        event.stopPropagation(); // チェックボックスクリックイベントの伝播を防止
-        tasks = tasks.filter(t => t.id !== id);
-        renderTasks();
+        event.stopPropagation();
+        
+        // アニメーション用に要素をフェードアウト
+        const card = event.target.closest('.task-card');
+        if(card) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(50px)';
+            card.style.transition = 'all 0.3s ease';
+        }
+        
+        setTimeout(() => {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+        }, 300);
+    }
+
+    // 🔊 完了時のクリア音 (Web Audio API)
+    function playCompletionSound() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            // C5 -> E5 -> G5 のような爽快な和音のアルペジオを模す
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+            osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
+            osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); // C6
+            
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.45);
+        } catch(e) {
+            console.warn("Audio Context is blocked or not supported", e);
+        }
+    }
+
+    // 🔊 iOS風プッシュ通知電子音 (Web Audio API)
+    function playNotificationSound() {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // 1音目
+            const osc1 = ctx.createOscillator();
+            const gain1 = ctx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(880, ctx.currentTime); // A5
+            gain1.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+            osc1.connect(gain1);
+            gain1.connect(ctx.destination);
+            osc1.start();
+            osc1.stop(ctx.currentTime + 0.12);
+
+            // 2音目 (ピロンの後半高音)
+            setTimeout(() => {
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1320, ctx.currentTime); // E6
+                gain2.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start();
+                osc2.stop(ctx.currentTime + 0.22);
+            }, 70);
+        } catch (e) {
+            console.warn("Audio error", e);
+        }
+    }
+
+    // 📱 モバイル振動 (Vibration API)
+    function triggerDeviceVibration() {
+        if (navigator.vibrate) {
+            // ヴヴッ と2回振動
+            navigator.vibrate([100, 50, 100]);
+        }
     }
 
     // 豪華なConfetti（紙吹雪）演出
     function triggerConfetti() {
-        const duration = 0.5 * 1000;
+        const duration = 0.4 * 1000;
         const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 25, spread: 360, ticks: 50, zIndex: 3000 };
+        const defaults = { startVelocity: 22, spread: 360, ticks: 45, zIndex: 3000 };
 
         function randomInRange(min, max) {
             return Math.random() * (max - min) + min;
@@ -978,37 +1516,125 @@
                 return clearInterval(interval);
             }
 
-            const particleCount = 30 * (timeLeft / duration);
-            // スマホモックアップ付近から発生するように調整
+            const particleCount = 25 * (timeLeft / duration);
             confetti(Object.assign({}, defaults, { 
                 particleCount, 
-                origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.4, 0.6) } 
+                origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.35, 0.55) } 
             }));
-        }, 150);
+        }, 120);
     }
 
-    // プッシュ通知シミュレーターの起動
-    function triggerNotification() {
+    // モーダル管理
+    function openAddModal() {
+        document.getElementById("addModal").classList.add("show");
+    }
+
+    function closeAddModal() {
+        document.getElementById("addModal").classList.remove("show");
+        document.getElementById("addForm").reset();
+    }
+
+    function closeModalOnOverlay(event) {
+        if (event.target.classList.contains('modal-overlay')) {
+            event.target.classList.remove('show');
+        }
+    }
+
+    // 手動追加フォーム送信
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        
+        const category = document.getElementById("formCategory").value.trim();
+        const title = document.getElementById("formTitle").value.trim();
+        const dueDate = document.getElementById("formDueDate").value.trim();
+        const timerVal = parseInt(document.querySelector('input[name="timerVal"]:checked').value);
+
+        const newId = Date.now();
+        const newCategory = category || "一般課題";
+        const newTitle = title || "無題の課題";
+
+        // タスク追加
+        tasks.push({
+            id: newId,
+            category: newCategory,
+            title: newTitle,
+            dueDate: dueDate || "期限なし",
+            badge: timerVal > 0 ? `⏰ タイマー動作中` : `📅 登録済`,
+            badgeType: "info",
+            completed: false
+        });
+
+        saveTasks();
+        renderTasks();
+        closeAddModal();
+        triggerConfetti();
+
+        // デモタイマー開始
+        if (timerVal > 0) {
+            startDemoTimer(timerVal, newCategory, newTitle);
+        }
+    }
+
+    // デモ用バックグラウンドタイマー
+    function startDemoTimer(seconds, category, title) {
+        console.log(`Timer started: ${seconds} seconds for [${category}] ${title}`);
+        
+        setTimeout(() => {
+            // タスクが既に完了/削除されていないかチェック
+            const task = tasks.find(t => t.title === title && t.category === category);
+            
+            // 通知発動
+            triggerNotification(
+                `⚠️ 【期限間近】${category}`, 
+                `「${title}」の提出タイマーが終了しました！ポータルから速やかに提出しましょう。`
+            );
+        }, seconds * 1000);
+    }
+
+    // プッシュ通知の表示
+    function triggerNotification(title, desc) {
         const notification = document.getElementById("pushNotification");
+        document.getElementById("pushTitle").innerText = title;
+        document.getElementById("pushDesc").innerText = desc;
+
+        // 音声とバイブ
+        playNotificationSound();
+        triggerDeviceVibration();
+
         notification.classList.add("show");
         
-        // 5秒後に非表示にする
+        // 6秒後に自動非表示
         setTimeout(() => {
             notification.classList.remove("show");
-        }, 5000);
+        }, 6000);
+    }
+
+    function dismissNotification() {
+        document.getElementById("pushNotification").classList.remove("show");
+    }
+
+    // 手動テスト用の通知
+    function triggerManualDemoNotification() {
+        triggerNotification(
+            "🔔 KadaiFlow 通知テスト",
+            "テスト通知が正常にトリガーされました。電子音とバイブレーション（実機のみ）の動作を確認してください。"
+        );
     }
 
     // マジックインポートプリセット
     const presets = {
-        1: "LINE: 「やばい！明日の昼12時までに、英語コミュニケーションのUnit 4テキスト問題回答やってオンラインで出さなきゃいけないの完全に忘れてた！」",
-        2: "Teams: 「【重要】データ構造とアルゴリズムの受講生へ。第2回プログラミング演習レポートを、5月31日(日)の23:59までにポータルにPDF形式で提出してください。」"
+        1: "LINE: 「やばい！明日の昼12時までに、英語コミュニケーションのUnit 6テキスト問題回答やって提出しなきゃいけないの完全に忘れてた！」",
+        2: "Teams: 「データ構造とアルゴリズムの受講生へ。第4回プログラミング演習レポートを、6月7日(日)までにPDF形式で提出してください。」"
     };
 
     function applyPreset(id) {
         document.getElementById("importInput").value = presets[id];
     }
 
-    // マジックインポートの抽出解析（モックロジック）
+    // AI抽出一時保持用
+    let pendingImport = null;
+
+    // マジックインポートの抽出解析（v2: 確認プレビュー付き）
     function magicImport() {
         const text = document.getElementById("importInput").value.trim();
         if (!text) {
@@ -1016,89 +1642,112 @@
             return;
         }
 
-        // 解析中アニメーション（簡易）
+        // 解析中アニメーション
         const importBtn = document.querySelector(".btn-primary");
         const originalContent = importBtn.innerHTML;
         importBtn.innerHTML = `
             <div class="audio-wave"><span></span><span></span><span></span></div>
-            解析中...
+            AI解析中...
         `;
         importBtn.disabled = true;
 
         setTimeout(() => {
-            let category = "一般タスク";
-            let title = "抽出された課題";
+            let category = "一般課題";
+            let title = "抽出されたレポート課題";
             let dueDate = "明日まで";
-            let badge = "⌛ 残り1日";
-            let badgeType = "warning";
+            let timerVal = "10"; // デフォルトで10秒後タイマーを仕掛ける（デモがわかりやすいため）
 
-            // 科目名判定
-            if (text.includes("英語") || text.includes("English")) {
+            // 簡易構文解析
+            if (text.includes("英語") || text.includes("Unit")) {
                 category = "英語コミュニケーション";
-                title = "Unit 4 テキスト回答・提出";
+                title = "Unit 6 テキスト回答・提出";
             } else if (text.includes("アルゴリズム") || text.includes("データ構造")) {
                 category = "データ構造とアルゴリズム";
-                title = "第2回演習プログラミングレポート";
+                title = "第4回演習プログラミングレポート";
             } else if (text.includes("概論") || text.includes("web3")) {
                 category = "web3・AI概論";
-                title = "第3回宿題提出 (リポジトリ push)";
+                title = "第6回宿題提出 (プロトタイプ v2 投稿)";
             }
 
-            // タイトル判定
             if (text.includes("レポート") || text.includes("提出")) {
-                if (category === "一般タスク") title = "レポート課題の提出";
+                if (category === "一般課題" && text.includes("レポート")) title = "レポート課題の提出";
             }
 
-            // 期限判定
             if (text.includes("明日")) {
-                dueDate = "明日まで";
-                badge = "⌛ 残り1日";
-                badgeType = "warning";
-            } else if (text.includes("31日") || text.includes("日")) {
-                dueDate = "5月31日(日) 23:59 まで";
-                badge = "📅 今週中";
-                badgeType = "info";
-            } else if (text.includes("今すぐ") || text.includes("忘れてた")) {
+                dueDate = "明日 12:00 まで";
+            } else if (text.includes("7日") || text.includes("日")) {
+                dueDate = "6月7日(日) 23:59 まで";
+            } else if (text.includes("忘れてた") || text.includes("やばい")) {
                 dueDate = "本日中";
-                badge = "🔥 残り時間わずか";
-                badgeType = "danger";
             }
 
-            // 重複チェック（簡易）
-            const exists = tasks.some(t => t.category === category && t.title === title);
-            
-            if (exists) {
-                alert("この課題は既にダッシュボードに登録されています！");
-            } else {
-                // 新しいタスクを追加
-                const newId = Date.now();
-                tasks.push({
-                    id: newId,
-                    category,
-                    title,
-                    dueDate,
-                    badge,
-                    badgeType,
-                    completed: false
-                });
+            // プレビューモーダルへ値をセットして開く
+            document.getElementById("previewCategory").value = category;
+            document.getElementById("previewTitle").value = title;
+            document.getElementById("previewDueDate").value = dueDate;
+            document.getElementById("previewTimer").value = timerVal;
 
-                renderTasks();
-                
-                // インプットをクリア
-                document.getElementById("importInput").value = "";
-                
-                // 成功Confetti
-                triggerConfetti();
-            }
+            pendingImport = { category, title, dueDate };
+
+            // モーダルオープン
+            document.getElementById("previewModal").classList.add("show");
 
             // ボタン復元
             importBtn.innerHTML = originalContent;
             importBtn.disabled = false;
 
-        }, 1200);
+        }, 1100);
     }
 
-    // 初回レンダリング
+    function closePreviewModal() {
+        document.getElementById("previewModal").classList.remove("show");
+        pendingImport = null;
+    }
+
+    // AI抽出の最終確認と登録
+    function confirmAIImport() {
+        const category = document.getElementById("previewCategory").value.trim();
+        const title = document.getElementById("previewTitle").value.trim();
+        const dueDate = document.getElementById("previewDueDate").value.trim();
+        const timerVal = parseInt(document.getElementById("previewTimer").value);
+
+        const newId = Date.now();
+
+        // ダッシュボードへ追加
+        tasks.push({
+            id: newId,
+            category: category || "一般課題",
+            title: title || "無題の課題",
+            dueDate: dueDate || "期限なし",
+            badge: timerVal > 0 ? `⏰ タイマー動作中` : `📅 AIインポート`,
+            badgeType: timerVal > 0 ? "warning" : "info",
+            completed: false
+        });
+
+        saveTasks();
+        renderTasks();
+        closePreviewModal();
+        triggerConfetti();
+
+        // テキストエリアをクリア
+        document.getElementById("importInput").value = "";
+
+        // タイマー開始
+        if (timerVal > 0) {
+            startDemoTimer(timerVal, category, title);
+            
+            // タイマーがセットされたことをお知らせする小さな通知
+            setTimeout(() => {
+                triggerNotification(
+                    "⏱️ デモタイマー開始",
+                    `「${title}」の締め切りタイマー（${timerVal}秒）が開始されました。時間が経過すると自動通知します。`
+                );
+            }, 600);
+        }
+    }
+
+    // 読み込みと描画の開始
+    loadTasks();
     renderTasks();
 </script>
 
