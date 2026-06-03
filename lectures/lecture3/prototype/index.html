@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KadaiFlow v2 - 動くプロトタイプ</title>
+    <title>KadaiFlow - 直感的で扱いやすい課題アプリ</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,13 +15,13 @@
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(-45deg, #060913, #0f0b25, #160829, #03050c);
+            --bg-gradient: linear-gradient(-45deg, #05070f, #0d0921, #130724, #020308);
             --phone-bg: #090c15;
-            --accent-primary: #8b5cf6; /* パープル */
-            --accent-secondary: #06b6d4; /* シアン */
-            --accent-success: #10b981; /* エメラルド */
-            --accent-warning: #f59e0b; /* アンバー */
-            --accent-danger: #ef4444; /* ローズ */
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --card-bg: rgba(22, 28, 45, 0.6);
@@ -45,11 +45,13 @@
             animation: gradientBG 15s ease infinite;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             color: var(--text-main);
             overflow-x: hidden;
             padding: 20px;
+            transition: all 0.3s ease;
         }
 
         @keyframes gradientBG {
@@ -58,14 +60,51 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* 🎛️ 表示モード切り替えスイッチ（画面上部） */
+        .layout-switch-bar {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            padding: 4px;
+            border-radius: 14px;
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            z-index: 2500;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .layout-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .layout-btn.active {
+            background: var(--glass-bg);
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* 全体レイアウト */
         .wrapper {
             display: flex;
             gap: 40px;
-            max-width: 1050px;
+            max-width: 1100px;
             width: 100%;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            transition: all 0.3s ease;
         }
 
         /* 📄 説明パネル */
@@ -79,6 +118,7 @@
             padding: 32px;
             backdrop-filter: blur(20px);
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
         .info-panel h1 {
@@ -187,6 +227,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         /* スマホ上部のノッチ */
@@ -204,6 +245,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.3s ease;
         }
         
         .notch-camera {
@@ -232,6 +274,7 @@
             font-weight: 600;
             z-index: 999;
             color: var(--text-main);
+            transition: all 0.3s ease;
         }
 
         .status-bar .right-icons {
@@ -320,6 +363,7 @@
             flex-direction: column;
             overflow: hidden;
             padding: 12px 20px 20px;
+            transition: all 0.3s ease;
         }
 
         /* アプリヘッダー */
@@ -408,6 +452,58 @@
             transition: width 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
 
+        /* ⌨️ インライン・クイック手動追加バー */
+        .quick-add-bar {
+            background: rgba(22, 28, 45, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 8px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .quick-input {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 6px 8px;
+            color: var(--text-main);
+            font-size: 0.72rem;
+            outline: none;
+            min-width: 0;
+            transition: all 0.2s;
+        }
+
+        .quick-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .input-category { flex: 1.2; }
+        .input-title { flex: 2; }
+        .input-due { flex: 1.5; }
+
+        .btn-quick-add {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .btn-quick-add:hover {
+            transform: scale(1.05);
+            box-shadow: var(--neon-glow);
+        }
+
         /* 🎛️ フィルター＆追加バー */
         .filter-bar {
             display: flex;
@@ -444,12 +540,12 @@
         }
 
         .btn-plus {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-            border: none;
-            padding: 5px 10px;
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            color: #c084fc;
+            padding: 4px 10px;
             border-radius: 8px;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -460,7 +556,8 @@
 
         .btn-plus:hover {
             transform: translateY(-1px);
-            box-shadow: var(--neon-glow);
+            background: rgba(139, 92, 246, 0.2);
+            color: white;
         }
 
         /* タスクリスト（スクロール） */
@@ -655,6 +752,7 @@
             border-radius: 20px;
             padding: 14px;
             backdrop-filter: blur(20px);
+            position: relative;
         }
 
         .import-panel-header {
@@ -679,6 +777,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 8px 12px;
+            padding-right: 40px; /* マイクボタン分を空ける */
             font-size: 0.72rem;
             color: var(--text-main);
             resize: none;
@@ -694,6 +793,43 @@
 
         .import-textarea::placeholder {
             color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 🎙️ 音声入力ボタン */
+        .btn-mic {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-mic:hover {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c084fc;
+            border-color: var(--accent-primary);
+        }
+
+        .btn-mic.listening {
+            background: var(--accent-danger);
+            color: white;
+            border-color: var(--accent-danger);
+            animation: pulse-red 1.2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .import-actions {
@@ -972,63 +1108,190 @@
             0% { height: 2px; }
             100% { height: 10px; }
         }
+
+        /* ========================================================
+           💻 PC全画面（デスクトップ）モードのレイアウト定義
+           ======================================================== */
+        body.desktop-mode {
+            padding: 0;
+            height: 100vh;
+            justify-content: flex-start;
+        }
+
+        body.desktop-mode .layout-switch-bar {
+            margin-top: 16px;
+            margin-bottom: 0;
+            position: absolute;
+            top: 0;
+            right: 40px;
+        }
+
+        body.desktop-mode .wrapper {
+            max-width: 100%;
+            height: 100vh;
+            gap: 0;
+            padding-top: 60px; /* 切り替えバーの領域確保 */
+            align-items: stretch;
+        }
+
+        /* PC全画面では説明パネルを左端のサイドバーに変形 */
+        body.desktop-mode .info-panel {
+            max-width: 320px;
+            border-radius: 0;
+            border: none;
+            border-right: 1px solid var(--card-border);
+            height: 100%;
+            background: rgba(10, 15, 30, 0.8);
+            box-shadow: none;
+        }
+
+        /* PC全画面ではスマホモックアップを大画面ダッシュボードに変形 */
+        body.desktop-mode .phone-mockup {
+            flex: 1;
+            width: auto;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+        }
+
+        /* スマホ用パーツを非表示 */
+        body.desktop-mode .phone-notch,
+        body.desktop-mode .status-bar {
+            display: none;
+        }
+
+        /* デスクモードでのメイン3カラム割り振り */
+        body.desktop-mode .app-content {
+            padding: 30px 40px;
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            grid-template-rows: auto auto 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        body.desktop-mode .app-header {
+            grid-column: 1 / -1;
+            margin-bottom: 0;
+        }
+
+        body.desktop-mode .progress-card {
+            grid-column: 1 / -1;
+            margin-bottom: 0;
+        }
+
+        /* タスク管理エリア（中央カラム） */
+        body.desktop-mode .task-area {
+            grid-column: 1 / 2;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(22, 28, 45, 0.25);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        body.desktop-mode .task-list-container {
+            margin-bottom: 0;
+        }
+
+        /* AIインポートエリア（右カラム） */
+        body.desktop-mode .import-area {
+            grid-column: 2 / 3;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        body.desktop-mode .import-panel {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.desktop-mode .import-input-container {
+            flex: 1;
+        }
+
+        body.desktop-mode .import-textarea {
+            height: 100%;
+            min-height: 150px;
+        }
+
+        /* ダイアログ（モーダル）のデスクトップ時の配置 */
+        body.desktop-mode .modal-overlay {
+            align-items: center;
+        }
+
+        body.desktop-mode .modal-content {
+            width: 450px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
     </style>
 </head>
-<body>
+<body class="desktop-mode"> <!-- デフォルトをデスクトップモードにして大画面で扱いやすく -->
+
+    <!-- 🎛️ 表示モード切り替えスイッチ -->
+    <div class="layout-switch-bar">
+        <button id="layout-desktop" class="layout-btn active" onclick="switchLayout('desktop')">
+            <i data-lucide="monitor" style="width:14px; height:14px;"></i>
+            大画面モード
+        </button>
+        <button id="layout-mobile" class="layout-btn" onclick="switchLayout('mobile')">
+            <i data-lucide="tablet" style="width:14px; height:14px;"></i>
+            スマホ枠モード
+        </button>
+    </div>
 
 <div class="wrapper">
-    <!-- 📄 説明パネル -->
+    <!-- 📄 説明パネル (デスクトップモード時は左サイドバー) -->
     <div class="info-panel">
-        <h1><i data-lucide="sparkles"></i> KadaiFlow v2</h1>
+        <h1><i data-lucide="sparkles"></i> KadaiFlow</h1>
         <p>
-            「課題期限忘れ」「複数ツールの散らばり」「続かない」を極上デザインで解決する、大学生のための課題・予定管理アプリの動くプロトタイプです。
+            「期限忘れ」「ツールの散らばり」「続かない」を劇的に解決する、超扱いやすい大学生向け課題管理アプリ。
         </p>
         
         <div class="tag-container">
-            <span class="feature-tag">VPC Fitモデル</span>
-            <span class="feature-tag v2-badge">v2: 永続化(保存)対応</span>
-            <span class="feature-tag v2-badge">v2: 自動タイマー通知</span>
-            <span class="feature-tag v2-badge">v2: 音声＆振動効果</span>
+            <span class="feature-tag v2-badge">v2.5: インライン追加</span>
+            <span class="feature-tag v2-badge">v2.5: 大画面表示対応</span>
+            <span class="feature-tag v2-badge">v2.5: マイク音声入力</span>
         </div>
 
         <div class="feature-list">
             <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="save" style="width:16px; height:16px;"></i></div>
+                <div class="feature-icon"><i data-lucide="keyboard" style="width:16px; height:16px;"></i></div>
                 <div class="feature-desc">
-                    <h3><span class="new-label">NEW</span> データの永続保存 (localStorage)</h3>
-                    <p>タスクの登録、完了、削除データがブラウザに永続保存されます。ページをリロードしてもあなたのタスクリストは消えません。</p>
+                    <h3>インライン・手動クイック入力</h3>
+                    <p>リストのすぐ上に入力欄を常設。科目・課題名・期限をキーボードで直接手動入力し、Enterキーで即座に追加できます。</p>
                 </div>
             </div>
 
             <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="clock-3" style="width:16px; height:16px;"></i></div>
+                <div class="feature-icon"><i data-lucide="mic" style="width:16px; height:16px;"></i></div>
                 <div class="feature-desc">
-                    <h3><span class="new-label">NEW</span> リアルタイム時間経過通知</h3>
-                    <p>タスク新規追加時に「10秒後」などのデモ用タイマーを設定可能。時間が来るとバックグラウンド処理により自動で通知されます。</p>
+                    <h3>マイクから音声自動インポート</h3>
+                    <p>マイクボタンを押して声で「明日の昼までに英語のレポート」と喋るだけで、音声認識により自動で課題が抽出登録されます。</p>
                 </div>
             </div>
             
             <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="volume-2" style="width:16px; height:16px;"></i></div>
+                <div class="feature-icon"><i data-lucide="fullscreen" style="width:16px; height:16px;"></i></div>
                 <div class="feature-desc">
-                    <h3><span class="new-label">NEW</span> 五感に訴える通知 (音＆振動)</h3>
-                    <p>通知バナー出現時に、Web Audio APIで生成した電子音を鳴らし、さらにスマホ実機では「ヴヴッ」とバイブが連動します。</p>
-                </div>
-            </div>
-
-            <div class="feature-item">
-                <div class="feature-icon"><i data-lucide="search-code" style="width:16px; height:16px;"></i></div>
-                <div class="feature-desc">
-                    <h3><span class="new-label">NEW</span> AI抽出プレビュー & 確認</h3>
-                    <p>LINE等のコピペ抽出結果をそのまま登録せず、一旦確認・修正して登録できるステップを追加し、誤動作を防ぎます。</p>
+                    <h3>💻大画面 / 📱スマホ切替</h3>
+                    <p>右上のボタンで、PCの大画面に適した「広々3カラム表示」と、実機サイズを想定した「スマホ枠表示」をいつでも切替可能です。</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 📱 スマホモックアップ -->
+    <!-- 📱 スマホモックアップ (デスクトップモード時は大画面ダッシュボードに変形) -->
     <div class="phone-mockup">
-        <!-- 上部ノッチ -->
+        <!-- 上部ノッチ (モバイル専用) -->
         <div class="phone-notch">
             <div class="notch-camera"></div>
             <div class="notch-speaker"></div>
@@ -1049,7 +1312,7 @@
             </div>
         </div>
 
-        <!-- ステータスバー -->
+        <!-- ステータスバー (モバイル専用) -->
         <div class="status-bar">
             <span id="statusBarTime">09:41</span>
             <div class="right-icons">
@@ -1059,7 +1322,7 @@
             </div>
         </div>
 
-        <!-- アプリ内コンテンツ -->
+        <!-- アプリ内コンテンツ (大画面時はグリッドレイアウト) -->
         <div class="app-content">
             <!-- アプリヘッダー -->
             <div class="app-header">
@@ -1088,53 +1351,75 @@
                 </div>
             </div>
 
-            <!-- フィルター ＆ 追加ボタン -->
-            <div class="filter-bar">
-                <div class="filter-tabs">
-                    <button id="filter-all" class="filter-tab active" onclick="setFilter('all')">すべて</button>
-                    <button id="filter-active" class="filter-tab" onclick="setFilter('active')">未完了</button>
-                    <button id="filter-completed" class="filter-tab" onclick="setFilter('completed')">完了</button>
-                </div>
-                <button class="btn-plus" onclick="openAddModal()">
-                    <i data-lucide="plus" style="width:12px; height:12px;"></i>
-                    課題追加
-                </button>
-            </div>
-
-            <!-- スクロール可能なタスクリスト -->
-            <div id="taskListContainer" class="task-list-container">
-                <!-- 動的に生成されます -->
-            </div>
-
-            <!-- マジックインポートパネル -->
-            <div class="import-panel">
-                <div class="import-panel-header">
-                    <i data-lucide="wand-2" style="width:14px; height:14px;"></i>
-                    <span>マジック・インポート (LINE/LINE等から)</span>
-                </div>
-                <div class="import-input-container">
-                    <textarea id="importInput" class="import-textarea" placeholder="LINEの連絡などをコピペしてね...&#10;例: 来週の英語のレポート明日までだって！"></textarea>
-                </div>
-                <div class="import-actions">
-                    <div class="preset-tags">
-                        <button class="btn-preset" onclick="applyPreset(1)">LINEの噂話</button>
-                        <button class="btn-preset" onclick="applyPreset(2)">Teamsの公式</button>
+            <!-- 中央カラム：タスク管理エリア -->
+            <div class="task-area">
+                <!-- フィルター ＆ 追加バー -->
+                <div class="filter-bar">
+                    <div class="filter-tabs">
+                        <button id="filter-all" class="filter-tab active" onclick="setFilter('all')">すべて</button>
+                        <button id="filter-active" class="filter-tab" onclick="setFilter('active')">未完了</button>
+                        <button id="filter-completed" class="filter-tab" onclick="setFilter('completed')">完了</button>
                     </div>
-                    <button class="btn-primary" onclick="magicImport()">
-                        <i data-lucide="sparkles" style="width:12px; height:12px;"></i>
-                        AI自動抽出
+                    <button class="btn-plus" onclick="openAddModal()" title="タイマーを設定して追加">
+                        <i data-lucide="clock-3" style="width:12px; height:12px;"></i>
+                        タイマー追加
                     </button>
+                </div>
+
+                <!-- ⌨️ インライン・クイック手動追加バー -->
+                <div class="quick-add-bar">
+                    <input type="text" id="quickCategory" class="quick-input input-category" placeholder="科目名(Enterで追加)" required>
+                    <input type="text" id="quickTitle" class="quick-input input-title" placeholder="課題名..." required>
+                    <input type="text" id="quickDue" class="quick-input input-due" placeholder="期限(本日23時等)..." onkeydown="handleQuickAddKeyDown(event)" required>
+                    <button class="btn-quick-add" onclick="quickAddSubmit()" title="追加">
+                        <i data-lucide="plus" style="width:14px; height:14px;"></i>
+                    </button>
+                </div>
+
+                <!-- スクロール可能なタスクリスト -->
+                <div id="taskListContainer" class="task-list-container">
+                    <!-- 動的に生成されます -->
+                </div>
+            </div>
+
+            <!-- 右カラム：AIインポートエリア -->
+            <div class="import-area">
+                <!-- マジックインポートパネル -->
+                <div class="import-panel">
+                    <div class="import-panel-header">
+                        <i data-lucide="wand-2" style="width:14px; height:14px;"></i>
+                        <span>マジック・インポート (コピペ / 音声)</span>
+                    </div>
+                    <div class="import-input-container">
+                        <textarea id="importInput" class="import-textarea" placeholder="LINEの連絡などをコピペするか、🎙️ボタンを押して声で話しかけてね...&#10;例: 来週の英語のレポート明日までだって！"></textarea>
+                        
+                        <!-- 🎙️ 音声認識ボタン -->
+                        <button id="micBtn" class="btn-mic" onclick="toggleVoiceInput()" title="音声で入力">
+                            <i data-lucide="mic" style="width:16px; height:16px;"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="import-actions">
+                        <div class="preset-tags">
+                            <button class="btn-preset" onclick="applyPreset(1)">LINE</button>
+                            <button class="btn-preset" onclick="applyPreset(2)">Teams</button>
+                        </div>
+                        <button class="btn-primary" onclick="magicImport()">
+                            <i data-lucide="sparkles" style="width:12px; height:12px;"></i>
+                            AI自動抽出
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 🪟 新規タスク追加モーダル -->
+        <!-- 🪟 手動詳細・タイマー追加モーダル -->
         <div id="addModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
                         <i data-lucide="plus-circle" style="width:18px; height:18px;"></i>
-                        <span>手動で課題を追加</span>
+                        <span>詳細設定・タイマー付き追加</span>
                     </div>
                     <button class="btn-close" onclick="closeAddModal()">
                         <i data-lucide="x" style="width:18px; height:18px;"></i>
@@ -1180,7 +1465,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-submit">ダッシュボードに追加</button>
+                    <button type="submit" class="btn-submit">登録する</button>
                 </form>
             </div>
         </div>
@@ -1191,7 +1476,7 @@
                 <div class="modal-header">
                     <div class="modal-title">
                         <i data-lucide="sparkles" style="width:18px; height:18px; color:#22d3ee;"></i>
-                        <span>AI抽出プレビュー確認</span>
+                        <span>AI抽出結果プレビュー</span>
                     </div>
                     <button class="btn-close" onclick="closePreviewModal()">
                         <i data-lucide="x" style="width:18px; height:18px;"></i>
@@ -1199,7 +1484,7 @@
                 </div>
                 
                 <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:14px; line-height:1.4;">
-                    テキストから自動抽出された結果です。必要に応じて修正し、登録ボタンを押してください。
+                    抽出結果を確認し、必要に応じて修正して登録してください。
                 </p>
 
                 <div class="ai-preview-box">
@@ -1226,7 +1511,7 @@
                     </div>
                 </div>
 
-                <button class="btn-submit" onclick="confirmAIImport()">この内容でダッシュボードに登録</button>
+                <button class="btn-submit" onclick="confirmAIImport()">ダッシュボードに登録</button>
             </div>
         </div>
     </div>
@@ -1236,17 +1521,18 @@
     // アイコンの初期化
     lucide.createIcons();
 
-    // ステータスバーの時間をリアルタイム更新
+    // ステータスバー時間 (モバイル時のみ用)
     function updateClock() {
         const now = new Date();
         const hrs = String(now.getHours()).padStart(2, '0');
         const mins = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById("statusBarTime").innerText = `${hrs}:${mins}`;
+        const el = document.getElementById("statusBarTime");
+        if(el) el.innerText = `${hrs}:${mins}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 初期デフォルトタスク
+    // デフォルトタスク
     const defaultTasks = [
         {
             id: 1,
@@ -1277,18 +1563,29 @@
         }
     ];
 
-    // 状態管理
     let tasks = [];
     let currentFilter = 'all';
 
-    // localStorageから読み込み
+    // レイアウトモード切り替え
+    function switchLayout(mode) {
+        document.querySelectorAll('.layout-btn').forEach(btn => btn.classList.remove('active'));
+        if (mode === 'desktop') {
+            document.body.classList.add('desktop-mode');
+            document.getElementById('layout-desktop').classList.add('active');
+        } else {
+            document.body.classList.remove('desktop-mode');
+            document.getElementById('layout-mobile').classList.add('active');
+        }
+        triggerConfetti();
+    }
+
+    // localStorage読み込み
     function loadTasks() {
-        const saved = localStorage.getItem('kadaiflow_tasks_v2');
+        const saved = localStorage.getItem('kadaiflow_tasks_v2.5');
         if (saved) {
             try {
                 tasks = JSON.parse(saved);
             } catch (e) {
-                console.error("Failed to parse stored tasks, loading default", e);
                 tasks = [...defaultTasks];
             }
         } else {
@@ -1297,22 +1594,19 @@
         }
     }
 
-    // localStorageへ保存
     function saveTasks() {
-        localStorage.setItem('kadaiflow_tasks_v2', JSON.stringify(tasks));
+        localStorage.setItem('kadaiflow_tasks_v2.5', JSON.stringify(tasks));
     }
 
-    // データ全リセット
     function clearAllData() {
-        if (confirm("すべてのデータをリセットし、初期データに戻しますか？")) {
-            localStorage.removeItem('kadaiflow_tasks_v2');
+        if (confirm("すべてのデータを初期化しますか？")) {
+            localStorage.removeItem('kadaiflow_tasks_v2.5');
             loadTasks();
             renderTasks();
             triggerConfetti();
         }
     }
 
-    // フィルターの変更
     function setFilter(filter) {
         currentFilter = filter;
         document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -1320,12 +1614,11 @@
         renderTasks();
     }
 
-    // タスクリストのレンダリング
+    // タスク描画
     function renderTasks() {
         const container = document.getElementById("taskListContainer");
         container.innerHTML = "";
 
-        // フィルター適用
         let filteredTasks = tasks;
         if (currentFilter === 'active') {
             filteredTasks = tasks.filter(t => !t.completed);
@@ -1337,7 +1630,7 @@
             container.innerHTML = `
                 <div class="empty-state">
                     <i data-lucide="inbox" style="width: 32px; height: 32px; color: var(--text-muted); margin-bottom: 8px;"></i>
-                    <p>表示する課題はありません！<br>${currentFilter === 'active' ? 'すべての課題が完了しています！' : '課題を追加してみましょう！'}</p>
+                    <p>課題はありません！<br>${currentFilter === 'active' ? 'すべての課題が完了しています！' : '課題を追加してみましょう！'}</p>
                 </div>
             `;
             lucide.createIcons();
@@ -1345,7 +1638,6 @@
             return;
         }
 
-        // 締め切り順/未完了順にソートして並べる
         const sortedTasks = [...filteredTasks].sort((a, b) => a.completed - b.completed);
 
         sortedTasks.forEach(task => {
@@ -1382,7 +1674,6 @@
         updateProgress();
     }
 
-    // 達成プログレスバーの更新
     function updateProgress() {
         const total = tasks.length;
         const completed = tasks.filter(t => t.completed).length;
@@ -1395,7 +1686,6 @@
         text.innerText = `${percent}%`;
     }
 
-    // タスク完了切り替え
     function toggleTask(id) {
         const index = tasks.findIndex(t => t.id === id);
         if (index !== -1) {
@@ -1406,16 +1696,12 @@
                 playCompletionSound();
                 triggerConfetti();
             }
-            
             renderTasks();
         }
     }
 
-    // タスク削除
     function deleteTask(event, id) {
         event.stopPropagation();
-        
-        // アニメーション用に要素をフェードアウト
         const card = event.target.closest('.task-card');
         if(card) {
             card.style.opacity = '0';
@@ -1430,71 +1716,170 @@
         }, 300);
     }
 
-    // 🔊 完了時のクリア音 (Web Audio API)
+    // ⌨️ クイック追加のキーダウンハンドラー (Enterキー対応)
+    function handleQuickAddKeyDown(event) {
+        if (event.key === 'Enter') {
+            quickAddSubmit();
+        }
+    }
+
+    // ⌨️ インライン・クイック手動追加
+    function quickAddSubmit() {
+        const catInput = document.getElementById("quickCategory");
+        const titleInput = document.getElementById("quickTitle");
+        const dueInput = document.getElementById("quickDue");
+
+        const category = catInput.value.trim();
+        const title = titleInput.value.trim();
+        const dueDate = dueInput.value.trim();
+
+        if (!category || !title) {
+            alert("科目名と課題タイトルを入力してください！");
+            return;
+        }
+
+        const newId = Date.now();
+        tasks.push({
+            id: newId,
+            category,
+            title,
+            dueDate: dueDate || "期限なし",
+            badge: "📅 クイック登録",
+            badgeType: "info",
+            completed: false
+        });
+
+        saveTasks();
+        renderTasks();
+
+        // フォームクリア
+        catInput.value = "";
+        titleInput.value = "";
+        dueInput.value = "";
+
+        // 成功音と紙吹雪
+        playCompletionSound();
+        triggerConfetti();
+    }
+
+    // 音声認識 (Speech-to-Text) ロジック
+    let recognition = null;
+    let isListening = false;
+
+    function initVoiceRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("お使いのブラウザは音声認識をサポートしていません。Google Chrome等のブラウザでお試しください。");
+            return null;
+        }
+        
+        const rec = new SpeechRecognition();
+        rec.lang = 'ja-JP';
+        rec.continuous = false;
+        rec.interimResults = false;
+
+        rec.onstart = () => {
+            isListening = true;
+            const btn = document.getElementById("micBtn");
+            btn.classList.add("listening");
+            btn.innerHTML = `<i data-lucide="mic-off" style="width:16px; height:16px;"></i>`;
+            lucide.createIcons();
+            document.getElementById("importInput").value = "お話しください...";
+        };
+
+        rec.onend = () => {
+            isListening = false;
+            const btn = document.getElementById("micBtn");
+            btn.classList.remove("listening");
+            btn.innerHTML = `<i data-lucide="mic" style="width:16px; height:16px;"></i>`;
+            lucide.createIcons();
+        };
+
+        rec.onresult = (event) => {
+            const resultText = event.results[0][0].transcript;
+            document.getElementById("importInput").value = resultText;
+            
+            // 音声が認識されたら、即座にAI抽出処理を自動実行！
+            setTimeout(() => {
+                magicImport();
+            }, 600);
+        };
+
+        rec.onerror = (e) => {
+            console.error("Speech Recognition Error", e);
+            document.getElementById("importInput").value = "";
+            alert("音声がうまく認識できませんでした。もう一度お試しください。");
+        };
+
+        return rec;
+    }
+
+    function toggleVoiceInput() {
+        if (!recognition) {
+            recognition = initVoiceRecognition();
+        }
+        if (!recognition) return;
+
+        if (isListening) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    }
+
+    // 🔊 完了音 (Web Audio API)
     function playCompletionSound() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            
             osc.type = 'sine';
-            // C5 -> E5 -> G5 のような爽快な和音のアルペジオを模す
-            osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
-            osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
-            osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); // C6
-            
-            gain.gain.setValueAtTime(0.12, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
-            
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+            osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16);
+            osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
             osc.connect(gain);
             gain.connect(ctx.destination);
             osc.start();
-            osc.stop(ctx.currentTime + 0.45);
-        } catch(e) {
-            console.warn("Audio Context is blocked or not supported", e);
-        }
+            osc.stop(ctx.currentTime + 0.4);
+        } catch(e) {}
     }
 
     // 🔊 iOS風プッシュ通知電子音 (Web Audio API)
     function playNotificationSound() {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // 1音目
             const osc1 = ctx.createOscillator();
             const gain1 = ctx.createGain();
             osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(880, ctx.currentTime); // A5
-            gain1.gain.setValueAtTime(0.12, ctx.currentTime);
+            osc1.frequency.setValueAtTime(880, ctx.currentTime);
+            gain1.gain.setValueAtTime(0.1, ctx.currentTime);
             gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
             osc1.connect(gain1);
             gain1.connect(ctx.destination);
             osc1.start();
             osc1.stop(ctx.currentTime + 0.12);
 
-            // 2音目 (ピロンの後半高音)
             setTimeout(() => {
                 const osc2 = ctx.createOscillator();
                 const gain2 = ctx.createGain();
                 osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(1320, ctx.currentTime); // E6
-                gain2.gain.setValueAtTime(0.12, ctx.currentTime);
+                osc2.frequency.setValueAtTime(1320, ctx.currentTime);
+                gain2.gain.setValueAtTime(0.1, ctx.currentTime);
                 gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
                 osc2.connect(gain2);
                 gain2.connect(ctx.destination);
                 osc2.start();
                 osc2.stop(ctx.currentTime + 0.22);
             }, 70);
-        } catch (e) {
-            console.warn("Audio error", e);
-        }
+        } catch (e) {}
     }
 
-    // 📱 モバイル振動 (Vibration API)
+    // 📱 振動
     function triggerDeviceVibration() {
         if (navigator.vibrate) {
-            // ヴヴッ と2回振動
             navigator.vibrate([100, 50, 100]);
         }
     }
@@ -1503,7 +1888,7 @@
     function triggerConfetti() {
         const duration = 0.4 * 1000;
         const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 22, spread: 360, ticks: 45, zIndex: 3000 };
+        const defaults = { startVelocity: 20, spread: 360, ticks: 40, zIndex: 3000 };
 
         function randomInRange(min, max) {
             return Math.random() * (max - min) + min;
@@ -1516,10 +1901,10 @@
                 return clearInterval(interval);
             }
 
-            const particleCount = 25 * (timeLeft / duration);
+            const particleCount = 20 * (timeLeft / duration);
             confetti(Object.assign({}, defaults, { 
                 particleCount, 
-                origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.35, 0.55) } 
+                origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.3, 0.5) } 
             }));
         }, 120);
     }
@@ -1540,7 +1925,6 @@
         }
     }
 
-    // 手動追加フォーム送信
     function handleFormSubmit(event) {
         event.preventDefault();
         
@@ -1553,7 +1937,6 @@
         const newCategory = category || "一般課題";
         const newTitle = title || "無題の課題";
 
-        // タスク追加
         tasks.push({
             id: newId,
             category: newCategory,
@@ -1569,21 +1952,13 @@
         closeAddModal();
         triggerConfetti();
 
-        // デモタイマー開始
         if (timerVal > 0) {
             startDemoTimer(timerVal, newCategory, newTitle);
         }
     }
 
-    // デモ用バックグラウンドタイマー
     function startDemoTimer(seconds, category, title) {
-        console.log(`Timer started: ${seconds} seconds for [${category}] ${title}`);
-        
         setTimeout(() => {
-            // タスクが既に完了/削除されていないかチェック
-            const task = tasks.find(t => t.title === title && t.category === category);
-            
-            // 通知発動
             triggerNotification(
                 `⚠️ 【期限間近】${category}`, 
                 `「${title}」の提出タイマーが終了しました！ポータルから速やかに提出しましょう。`
@@ -1591,19 +1966,16 @@
         }, seconds * 1000);
     }
 
-    // プッシュ通知の表示
     function triggerNotification(title, desc) {
         const notification = document.getElementById("pushNotification");
         document.getElementById("pushTitle").innerText = title;
         document.getElementById("pushDesc").innerText = desc;
 
-        // 音声とバイブ
         playNotificationSound();
         triggerDeviceVibration();
 
         notification.classList.add("show");
         
-        // 6秒後に自動非表示
         setTimeout(() => {
             notification.classList.remove("show");
         }, 6000);
@@ -1613,7 +1985,6 @@
         document.getElementById("pushNotification").classList.remove("show");
     }
 
-    // 手動テスト用の通知
     function triggerManualDemoNotification() {
         triggerNotification(
             "🔔 KadaiFlow 通知テスト",
@@ -1621,7 +1992,6 @@
         );
     }
 
-    // マジックインポートプリセット
     const presets = {
         1: "LINE: 「やばい！明日の昼12時までに、英語コミュニケーションのUnit 6テキスト問題回答やって提出しなきゃいけないの完全に忘れてた！」",
         2: "Teams: 「データ構造とアルゴリズムの受講生へ。第4回プログラミング演習レポートを、6月7日(日)までにPDF形式で提出してください。」"
@@ -1631,23 +2001,19 @@
         document.getElementById("importInput").value = presets[id];
     }
 
-    // AI抽出一時保持用
     let pendingImport = null;
 
-    // マジックインポートの抽出解析（v2: 確認プレビュー付き）
     function magicImport() {
         const text = document.getElementById("importInput").value.trim();
-        if (!text) {
-            alert("LINEやTeamsの連絡メッセージを入力してください！");
+        if (!text || text === "お話しください...") {
             return;
         }
 
-        // 解析中アニメーション
         const importBtn = document.querySelector(".btn-primary");
         const originalContent = importBtn.innerHTML;
         importBtn.innerHTML = `
             <div class="audio-wave"><span></span><span></span><span></span></div>
-            AI解析中...
+            解析中...
         `;
         importBtn.disabled = true;
 
@@ -1655,9 +2021,8 @@
             let category = "一般課題";
             let title = "抽出されたレポート課題";
             let dueDate = "明日まで";
-            let timerVal = "10"; // デフォルトで10秒後タイマーを仕掛ける（デモがわかりやすいため）
+            let timerVal = "10";
 
-            // 簡易構文解析
             if (text.includes("英語") || text.includes("Unit")) {
                 category = "英語コミュニケーション";
                 title = "Unit 6 テキスト回答・提出";
@@ -1673,7 +2038,7 @@
                 if (category === "一般課題" && text.includes("レポート")) title = "レポート課題の提出";
             }
 
-            if (text.includes("明日")) {
+            if (text.includes("明日") || text.includes("あした")) {
                 dueDate = "明日 12:00 まで";
             } else if (text.includes("7日") || text.includes("日")) {
                 dueDate = "6月7日(日) 23:59 まで";
@@ -1681,7 +2046,6 @@
                 dueDate = "本日中";
             }
 
-            // プレビューモーダルへ値をセットして開く
             document.getElementById("previewCategory").value = category;
             document.getElementById("previewTitle").value = title;
             document.getElementById("previewDueDate").value = dueDate;
@@ -1689,10 +2053,8 @@
 
             pendingImport = { category, title, dueDate };
 
-            // モーダルオープン
             document.getElementById("previewModal").classList.add("show");
 
-            // ボタン復元
             importBtn.innerHTML = originalContent;
             importBtn.disabled = false;
 
@@ -1704,7 +2066,6 @@
         pendingImport = null;
     }
 
-    // AI抽出の最終確認と登録
     function confirmAIImport() {
         const category = document.getElementById("previewCategory").value.trim();
         const title = document.getElementById("previewTitle").value.trim();
@@ -1713,7 +2074,6 @@
 
         const newId = Date.now();
 
-        // ダッシュボードへ追加
         tasks.push({
             id: newId,
             category: category || "一般課題",
@@ -1729,24 +2089,21 @@
         closePreviewModal();
         triggerConfetti();
 
-        // テキストエリアをクリア
         document.getElementById("importInput").value = "";
 
-        // タイマー開始
         if (timerVal > 0) {
             startDemoTimer(timerVal, category, title);
             
-            // タイマーがセットされたことをお知らせする小さな通知
             setTimeout(() => {
                 triggerNotification(
                     "⏱️ デモタイマー開始",
-                    `「${title}」の締め切りタイマー（${timerVal}秒）が開始されました。時間が経過すると自動通知します。`
+                    `「${title}」の締め切りタイマー（${timerVal}秒）が開始されました。自動通知します。`
                 );
             }, 600);
         }
     }
 
-    // 読み込みと描画の開始
+    // 初期化ロード
     loadTasks();
     renderTasks();
 </script>
